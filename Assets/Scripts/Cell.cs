@@ -77,14 +77,8 @@ public class Cell : MonoBehaviour
         allCells.Remove(this);
     }
 
-    private void Update()
-    {
-        
-    }
-
     private void Start()
     {
-
         InitializeCells();
     }
 
@@ -161,13 +155,6 @@ public class Cell : MonoBehaviour
                 excludedCells.Add(cell);
                 render = false;
             }
-
-
-            //if (cell.cellPiece != null && cell.cellPiece.pieceTeam != startingPiece.pieceTeam && !dontHaveAnAlliedNear)
-            //{
-            //    excludedCells.Add(cell);
-            //}
-
 
             if (steps > 1 && (cell.cellPiece == null || startingPiece.jumps)) {
                 cell.HigligtAdjacencCellsWithoutCell(excludedCells, isHiglited, steps - 1, startingPiece); 

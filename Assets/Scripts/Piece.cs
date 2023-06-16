@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum PieceTeam { 
     WHITE,
@@ -24,15 +22,7 @@ public class Piece : MonoBehaviour
     public Cell startingCell;
     public Cell targetCell;
 
-    //private void OnMouseUp()
-    //{
-    //    justClicked = !justClicked;
-    //    isClicked = true;
-    //    offset = transform.position - GetMouseWorldPosition(); // for the movement
-    //    if (isClicked == true && justClicked == true) { //this triggers only when you click
-    //        Clicked();
-    //    }
-    //}
+    //Todo: Move the movement outside this script
 
     private void Start()
     {
@@ -41,29 +31,21 @@ public class Piece : MonoBehaviour
         if (blocks) { cell.ToggleBlocked(true); }
     }
 
-    public void ClickedFull() {
+    public void Clicked() {
         isClicked = true;
         offset = transform.position - GetMouseWorldPosition(); // for the movement
-        //if (isClicked == true && justClicked == true)
-        //{ //this triggers only when you click
-            Clicked();
-        //}
-    }
 
-    private void Clicked() {
         startingCell = CastRayToFindMyCurrentCell();
         if (startingCell != null)
         {
             startingCell.HigligtAdjacencCellsWithoutCell(true, CalculateDistence(), this);
         }
+
     }
 
-    public void DeClickedFull() {
+    public void DeClicked() {
         isClicked = false;
-        DeClicked();
-    }
 
-    private void DeClicked() {
         if (targetCell != null && targetCell.higlited)
         {
             Piece otherCellPiece = targetCell.getPiece();
@@ -82,12 +64,6 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
-        //if (Input.GetMouseButtonUp(0) && isClicked == true && justClicked == false) //since OnMouseUp comes before Update with justClicked we can decide to trigger the release button or not
-        //{ 
-        //    isClicked = false;
-        //    DeClicked();
-        //}
-
         if (isClicked) //for the movement
         {
             Vector3 targetPosition = GetMouseWorldPosition() + offset;

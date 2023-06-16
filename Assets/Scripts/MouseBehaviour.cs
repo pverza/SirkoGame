@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MouseBehaviour : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class MouseBehaviour : MonoBehaviour
                     if (piece != null)
                     {
                         grabbedPiece = piece;
-                        grabbedPiece.ClickedFull();
+                        grabbedPiece.Clicked();
                         isGrabbed = true;
                     }
                 }
@@ -32,7 +30,7 @@ public class MouseBehaviour : MonoBehaviour
             else
             {
                 // Release the grabbed GameObject
-                grabbedPiece.DeClickedFull();
+                grabbedPiece.DeClicked();
                 grabbedPiece = null;
                 isGrabbed = false;
             }
