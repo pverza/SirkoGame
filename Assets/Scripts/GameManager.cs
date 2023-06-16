@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public int movesPerPlayer = 2;
     private int numberOfTurnsAvailableForCurrentPlayer = 1;
     public bool ignoreTurns = false;
-    private bool isGameover = false;
+    public bool isGameover = false;
 
     public Text uiText;
 
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver() {
-        uiText.text = currentTeamThatIsPlayng.ToString() + "Player \nWins";
+        uiText.text = currentTeamThatIsPlayng.ToString() + " Player \nWins";
         isGameover = true;
     }
 }
