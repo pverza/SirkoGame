@@ -19,7 +19,7 @@ public class MouseBehaviour : MonoBehaviour
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask))
                 {
                     Piece piece = hit.collider.gameObject.GetComponent<Piece>();
-                    if (piece != null)
+                    if (piece != null &&  GameManager.instance.IsTeamsTurn(piece.pieceTeam) && !piece.isAlreadyMoved)
                     {
                         grabbedPiece = piece;
                         grabbedPiece.Clicked();

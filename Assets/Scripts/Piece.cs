@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum PieceTeam { 
     WHITE,
@@ -21,8 +22,21 @@ public class Piece : MonoBehaviour
 
     public Cell startingCell;
     public Cell targetCell;
+    public bool isAlreadyMoved;
+    public static HashSet<Piece> allPieces = new HashSet<Piece>();
 
     //Todo: Move the movement outside this script
+
+
+    private void Awake()
+    {
+        allPieces.Add(this);
+    }
+
+    private void OnDestroy()
+    {
+        allPieces.Remove(this);
+    }
 
     private void Start()
     {
@@ -55,6 +69,8 @@ public class Piece : MonoBehaviour
             }
             moveToThatCell(targetCell);
 
+            isAlreadyMoved = true;
+            GameManager.instance.MoveToNextMove();
         }
         else
         {
@@ -126,6 +142,12 @@ public class Piece : MonoBehaviour
         {
             cell.UpdateBlocked();
         }
+        //check if it wins
+        WinningCell winningCell = cell.GetComponent<WinningCell>();
+        if (winningCell != null && winningCell.theamThatWinsIfReachThisCell == this.pieceTeam)
+        {
+            GameManager.instance.GameOver();
+        }
     }
 
     int CalculateDistence() {
@@ -145,5 +167,11 @@ public class Piece : MonoBehaviour
         }
 
         return distance;
+    }
+
+    public static void resetAllPiecesStatus() {
+        foreach (Piece piece in allPieces) {
+            piece.isAlreadyMoved = false;
+        }
     }
 }
