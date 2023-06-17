@@ -35,6 +35,10 @@ public class GameManager : MonoBehaviour
             GameOver(false);
             return;
         }
+        if (Piece.AllAlivePiecesAreBlocked()) {
+            GameOver(true);
+            return;
+        }
         numberOfTurnsAvailableForCurrentPlayer--;
         if (numberOfTurnsAvailableForCurrentPlayer <= 0) {
             currentTeamThatIsPlayng = currentTeamThatIsPlayng == PieceTeam.WHITE ? PieceTeam.BLACK : PieceTeam.WHITE;

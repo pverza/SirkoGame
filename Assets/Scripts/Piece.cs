@@ -208,4 +208,18 @@ public class Piece : MonoBehaviour
         }
         return false;
     }
+
+    //Also this is lazyCode
+    public static bool AllAlivePiecesAreBlocked() {
+        foreach (Piece piece in allPieces) {
+            if (!piece.isDeath || !piece.isAlreadyMoved) {
+                piece.startingCell = piece.CastRayToFindMyCurrentCell();
+                if (piece.startingCell != null && piece.CalculateDistence() > 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
