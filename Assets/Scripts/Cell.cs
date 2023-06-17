@@ -252,7 +252,7 @@ public class Cell : MonoBehaviour
         return cells;
     }
 
-    public void UpdateBlocked() {
+    public static void UpdateBlocked() {
         if (allCells == null) { return; }
 
         HashSet<Cell> blockedCells = new HashSet<Cell>();

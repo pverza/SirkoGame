@@ -135,6 +135,7 @@ MonoBehaviour:
     m_Bits: 55
   startingCell: {fileID: 0}
   targetCell: {fileID: 0}
+  isAlreadyMoved: 0
 --- !u!136 &-2423137222943415737
 CapsuleCollider:
   m_ObjectHideFlags: 0

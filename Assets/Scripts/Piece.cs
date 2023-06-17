@@ -63,12 +63,13 @@ public class Piece : MonoBehaviour
         if (targetCell != null && targetCell.higlited)
         {
             Piece otherCellPiece = targetCell.getPiece();
+            moveToThatCell(targetCell);
             if (otherCellPiece != null && otherCellPiece != this)
             {
                 otherCellPiece.transform.position = Vector3.one * 100;
+                if (otherCellPiece.blocks) { Cell.UpdateBlocked(); }
             }
-            moveToThatCell(targetCell);
-
+            
             isAlreadyMoved = true;
             GameManager.instance.MoveToNextMove();
         }
@@ -136,11 +137,14 @@ public class Piece : MonoBehaviour
             startingCell.HigligtAdjacencCellsWithoutCell(false, CalculateDistence(), this);
             startingCell.removePiece();
         }
+        //if (cell.getPiece() != null && cell.getPiece().blocks) {    //Todo: make it better
+        //    cell.UpdateBlocked();                                   //Todo: make it better
+        //}                                                           //Todo: make it better
         cell.addPiece(this);
         transform.position = new Vector3(cell.transform.position.x, transform.position.y, cell.transform.position.z);
         if (blocks)
         {
-            cell.UpdateBlocked();
+            Cell.UpdateBlocked();
         }
         //check if it wins
         WinningCell winningCell = cell.GetComponent<WinningCell>();
