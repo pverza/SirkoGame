@@ -533,6 +533,7 @@ MonoBehaviour:
   currentTeamThatIsPlayng: 0
   movesPerPlayer: 2
   ignoreTurns: 0
+  isGameover: 0
   uiText: {fileID: 1390168332}
 --- !u!4 &481130827
 Transform:

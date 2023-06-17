@@ -42,7 +42,7 @@ public class Piece : MonoBehaviour
     {
         Cell cell = CastRayToFindMyCurrentCell();
         moveToThatCell(cell);
-        if (blocks) { cell.ToggleBlocked(true); }
+        if (blocks) { cell.ToggleBlocked(true, this.pieceTeam); }
     }
 
     public void Clicked() {

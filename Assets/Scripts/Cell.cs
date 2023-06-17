@@ -15,6 +15,7 @@ public class Cell : MonoBehaviour
 
     public Material defaultMaterial, highlitedMaterial;
     public GameObject blockedCellMesh;
+    public GameObject blockedCellMesh1;
 
     public Dictionary<MovementCellDirection, HashSet<Cell>> adiacentCells = new Dictionary<MovementCellDirection, HashSet<Cell>>();
     private HashSet<Cell> unsortedAdiacentCells = new HashSet<Cell>();
@@ -176,11 +177,18 @@ public class Cell : MonoBehaviour
     }
 
 
-    public void ToggleBlocked(bool active)
+    public void ToggleBlocked(bool active, PieceTeam team)
     {
             foreach (Cell cell in unsortedAdiacentCells)
             {
-                cell.blockedCellMesh.SetActive(active);
+            if (team == PieceTeam.WHITE) 
+            { 
+                cell.blockedCellMesh.SetActive(active); 
+            }
+            else
+            {
+                cell.blockedCellMesh1.SetActive(active);
+            }
             }
     }
 
@@ -258,12 +266,13 @@ public class Cell : MonoBehaviour
         HashSet<Cell> blockedCells = new HashSet<Cell>();
         foreach(Cell cell in allCells) {
             cell.blockedCellMesh.SetActive(false);
+            cell.blockedCellMesh1.SetActive(false);
             if (cell.cellPiece != null && cell.cellPiece.blocks) {
                 blockedCells.Add(cell);
             }
         }
         foreach (Cell cell in blockedCells) {
-            cell.ToggleBlocked(true);
+            cell.ToggleBlocked(true, cell.cellPiece.pieceTeam);
         }
     }
 
