@@ -24,6 +24,7 @@ public class Piece : MonoBehaviour
     public Cell targetCell;
     public bool isAlreadyMoved;
     public static HashSet<Piece> allPieces = new HashSet<Piece>();
+    public bool isDeath = false;
 
     //Todo: Move the movement outside this script
 
@@ -68,6 +69,7 @@ public class Piece : MonoBehaviour
             {
                 otherCellPiece.transform.position = Vector3.one * 100;
                 if (otherCellPiece.blocks) { Cell.UpdateBlocked(); }
+                otherCellPiece.isDeath = true;
             }
             
             isAlreadyMoved = true;
@@ -108,7 +110,6 @@ public class Piece : MonoBehaviour
         if (!isClicked) {
             return;
         }
-        //Cell cell = other.gameObject.GetComponent<Cell>();
         if (cell == null) {
             return;
         }
@@ -137,9 +138,6 @@ public class Piece : MonoBehaviour
             startingCell.HigligtAdjacencCellsWithoutCell(false, CalculateDistence(), this);
             startingCell.removePiece();
         }
-        //if (cell.getPiece() != null && cell.getPiece().blocks) {    //Todo: make it better
-        //    cell.UpdateBlocked();                                   //Todo: make it better
-        //}                                                           //Todo: make it better
         cell.addPiece(this);
         transform.position = new Vector3(cell.transform.position.x, transform.position.y, cell.transform.position.z);
         if (blocks)
@@ -150,7 +148,7 @@ public class Piece : MonoBehaviour
         WinningCell winningCell = cell.GetComponent<WinningCell>();
         if (winningCell != null && winningCell.theamThatWinsIfReachThisCell == this.pieceTeam)
         {
-            GameManager.instance.GameOver();
+            GameManager.instance.GameOver(false);
         }
     }
 
@@ -177,5 +175,37 @@ public class Piece : MonoBehaviour
         foreach (Piece piece in allPieces) {
             piece.isAlreadyMoved = false;
         }
+    }
+
+    //todo: this is lazy code. it could be done better
+    public static bool CheckIfBothPlayersAreOnTheField()
+    {
+        int whitePieces = 0;
+        int blackPieces = 0;
+        foreach (Piece piece in allPieces)
+        {
+            if (piece != null)
+            {
+                if (piece.isDeath)
+                {
+                    continue;
+                }
+
+                if (piece.pieceTeam == PieceTeam.WHITE)
+                {
+                    whitePieces++;
+                }
+                else
+                {
+                    blackPieces++;
+                }
+
+                if (whitePieces > 0 && blackPieces > 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

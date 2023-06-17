@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
 
     public void MoveToNextMove() {
         if (isGameover) { return; };
+        if (!Piece.CheckIfBothPlayersAreOnTheField()) 
+        {
+            GameOver(false);
+            return;
+        }
         numberOfTurnsAvailableForCurrentPlayer--;
         if (numberOfTurnsAvailableForCurrentPlayer <= 0) {
             currentTeamThatIsPlayng = currentTeamThatIsPlayng == PieceTeam.WHITE ? PieceTeam.BLACK : PieceTeam.WHITE;
@@ -49,8 +54,10 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public void GameOver() {
+    public void GameOver(bool isStall) {
         uiText.text = currentTeamThatIsPlayng.ToString() + " Player \nWins";
         isGameover = true;
     }
+
+    //todo: I need to check if all players are blocked
 }
