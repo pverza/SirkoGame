@@ -181,14 +181,14 @@ public class Cell : MonoBehaviour
     {
             foreach (Cell cell in unsortedAdiacentCells)
             {
-            if (team == PieceTeam.WHITE) 
-            { 
-                cell.blockedCellMesh.SetActive(active); 
-            }
-            else
-            {
-                cell.blockedCellMesh1.SetActive(active);
-            }
+                if (team == PieceTeam.WHITE) 
+                { 
+                    cell.blockedCellMesh.SetActive(active); 
+                }
+                else
+                {
+                    cell.blockedCellMesh1.SetActive(active);
+                }
             }
     }
 
