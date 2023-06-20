@@ -94,8 +94,9 @@ GameObject:
   - component: {fileID: 4695770630655238498}
   - component: {fileID: -8595252232359960120}
   - component: {fileID: -2423137222943415737}
-  - component: {fileID: -2152935259678394084}
-  - component: {fileID: -4234157801040818470}
+  - component: {fileID: -1657692944805169527}
+  - component: {fileID: 8753687878186992311}
+  - component: {fileID: 114917748234347509}
   m_Layer: 8
   m_Name: Piece (3)
   m_TagString: Untagged
@@ -144,6 +145,7 @@ MonoBehaviour:
   targetCell: {fileID: 0}
   isAlreadyMoved: 0
   isDeath: 0
+  pieceId: 0
 --- !u!136 &-2423137222943415737
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -167,7 +169,19 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-2152935259678394084
+--- !u!114 &-1657692944805169527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2976329375350586021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b416a0119394684891a65c68acf6284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8753687878186992311
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,7 +200,7 @@ MonoBehaviour:
   SceneMigrationSynchronization: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-4234157801040818470
+--- !u!114 &114917748234347509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
