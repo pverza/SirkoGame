@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class MouseBehaviour : NetworkBehaviour
 {
+    [SerializeField]
     private Piece grabbedPiece;
     [SerializeField]
-    private bool isGrabbed = false;
+    private NetworkVariable<GrabbedType> isGrabbed = new NetworkVariable<GrabbedType>(GrabbedType.NOT_GRABBED);
     public LayerMask LayerMask;
 
     private Vector3 offset;
@@ -27,7 +28,7 @@ public class MouseBehaviour : NetworkBehaviour
             {
                 SendServerMessageServerRpc(Camera.main.ScreenPointToRay(Input.mousePosition));
             }
-            if (isGrabbed) //for the movement
+            if (isGrabbed.Value == GrabbedType.GRABBED_CLIENT) //for the movement
             {
                 Vector3 targetPosition = GetMouseWorldPosition() + offset;
                 SendServerMessageForMovementServerRpc(targetPosition.x, targetPosition.z);
@@ -39,7 +40,7 @@ public class MouseBehaviour : NetworkBehaviour
 
     //private void NetworkUpdate()
     //{
-    //    if (isGrabbed) //for the movement
+    //    if (isGrabbed && !NetworkManager.Singleton.IsServer) //for the movement
     //    {
     //        Vector3 targetPosition = GetMouseWorldPosition() + offset;
     //        SendServerMessageForMovementServerRpc(targetPosition.x, targetPosition.z);
@@ -69,10 +70,11 @@ public class MouseBehaviour : NetworkBehaviour
         networkClient = NetworkManager.Singleton.LocalClient;
     }
 
+    //this is the client
     [ServerRpc(RequireOwnership = false)]
     private void SendServerMessageServerRpc(Ray ray)
     {
-        if (!isGrabbed)
+        if (isGrabbed.Value == GrabbedType.NOT_GRABBED)
         {
             // Raycast to check if we hit a GameObject
             //Ray ray = Camera.main.ScreenPointToRay(new Vector3(mousePositionX, mousePositionY, mousePositionZ));
@@ -88,7 +90,7 @@ public class MouseBehaviour : NetworkBehaviour
                     grabbedPiece = grabbedPieceExtracted;
 
                     grabbedPiece.Clicked();
-                    isGrabbed = true;
+                    isGrabbed.Value = GrabbedType.GRABBED_CLIENT;
                     offset = grabbedPiece.transform.position - GetMouseWorldPosition(); // move thisone outside
 
                     UpdateHiglightedClientRpc(GameManager.instance.GetHiglightedStatus());
@@ -101,7 +103,7 @@ public class MouseBehaviour : NetworkBehaviour
             // Release the grabbed GameObject
             grabbedPiece.DeClicked();
             grabbedPiece = null;
-            isGrabbed = false;
+            isGrabbed.Value = GrabbedType.NOT_GRABBED;
 
             UpdateClientCellsAfterDeclickedClientRpc(GameManager.instance.GetBlockedPositions(), GameManager.instance.GetBlockedPositions1());
         }
@@ -110,13 +112,16 @@ public class MouseBehaviour : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SendServerMessageForMovementServerRpc(float xPosition, float zPosition)
     {
-        Debug.Log(xPosition + " " + zPosition);
-        grabbedPiece.transform.position = new Vector3(xPosition, grabbedPiece.transform.position.y, zPosition);
+        //Debug.Log(xPosition + " " + zPosition);
+        if (grabbedPiece != null)
+        {
+            grabbedPiece.transform.position = new Vector3(xPosition, grabbedPiece.transform.position.y, zPosition);
+        }
     }
 
-
+    //this is for server
     void PerformMovementAndLogic() {
-        if (!isGrabbed)
+        if (isGrabbed.Value == GrabbedType.NOT_GRABBED)
         {
             // Raycast to check if we hit a GameObject
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -129,7 +134,7 @@ public class MouseBehaviour : NetworkBehaviour
                 {
                     grabbedPiece = piece;
                     grabbedPiece.Clicked();
-                    isGrabbed = true;
+                    isGrabbed.Value = GrabbedType.GRABBED_SERVER;
                     offset = grabbedPiece.transform.position - GetMouseWorldPosition();
 
                     UpdateHiglightedClientRpc(GameManager.instance.GetHiglightedStatus());
@@ -142,7 +147,7 @@ public class MouseBehaviour : NetworkBehaviour
             // Release the grabbed GameObject
             grabbedPiece.DeClicked();
             grabbedPiece = null;
-            isGrabbed = false;
+            isGrabbed.Value = GrabbedType.NOT_GRABBED;
 
             UpdateClientCellsAfterDeclickedClientRpc(GameManager.instance.GetBlockedPositions(), GameManager.instance.GetBlockedPositions1());
         }
@@ -150,7 +155,7 @@ public class MouseBehaviour : NetworkBehaviour
 
     private void Move()
     {
-        if (isGrabbed) //for the movement
+        if (isGrabbed.Value == GrabbedType.GRABBED_SERVER) //for the movement
         {
             Vector3 targetPosition = GetMouseWorldPosition() + offset;
             grabbedPiece.transform.position = new Vector3(targetPosition.x, grabbedPiece.transform.position.y, targetPosition.z);
@@ -175,4 +180,10 @@ public class MouseBehaviour : NetworkBehaviour
         GameManager.instance.SetBlockedPositions(blockerStatus);
         GameManager.instance.SetBlockedPositions1(blocker1status);
     }
+}
+
+public enum GrabbedType{
+    NOT_GRABBED,
+    GRABBED_SERVER,
+    GRABBED_CLIENT
 }
