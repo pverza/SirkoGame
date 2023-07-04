@@ -167,16 +167,10 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    private void UpdateText(string text) {
+    public void UpdateText(string text) {
         uiText.text = text;
-        if (NetworkManager.Singleton.IsServer) {
-            UpdateTextRpc(text);
-        }
-    }
-
-    [ClientRpc]
-    private void UpdateTextRpc(string text)
-    {
-        uiText.text = text;
+        //if (NetworkManager.Singleton.IsServer) {
+        //    UpdateTextClientRpc(text);
+        //}
     }
 }

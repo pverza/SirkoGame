@@ -12,7 +12,7 @@ public class MouseBehaviour : NetworkBehaviour
 
     private void Update()
     {
-        if (NetworkManager.Singleton.IsServer)
+        if (NetworkManager.Singleton.IsServer || !NetworkManager.Singleton.IsConnectedClient)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -25,7 +25,7 @@ public class MouseBehaviour : NetworkBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                SendServerMessageServerRpc(Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z);
+                SendServerMessageServerRpc(Camera.main.ScreenPointToRay(Input.mousePosition));
             }
             if (isGrabbed) //for the movement
             {
@@ -70,12 +70,12 @@ public class MouseBehaviour : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SendServerMessageServerRpc(float mousePositionX, float mousePositionY, float mousePositionZ)
+    private void SendServerMessageServerRpc(Ray ray)
     {
         if (!isGrabbed)
         {
             // Raycast to check if we hit a GameObject
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(mousePositionX, mousePositionY, mousePositionZ));
+            //Ray ray = Camera.main.ScreenPointToRay(new Vector3(mousePositionX, mousePositionY, mousePositionZ));
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask))
@@ -90,6 +90,8 @@ public class MouseBehaviour : NetworkBehaviour
                     grabbedPiece.Clicked();
                     isGrabbed = true;
                     offset = grabbedPiece.transform.position - GetMouseWorldPosition(); // move thisone outside
+
+                    UpdateHiglightedClientRpc(GameManager.instance.GetHiglightedStatus());
                 }
             }
 
@@ -100,6 +102,8 @@ public class MouseBehaviour : NetworkBehaviour
             grabbedPiece.DeClicked();
             grabbedPiece = null;
             isGrabbed = false;
+
+            UpdateClientCellsAfterDeclickedClientRpc(GameManager.instance.GetBlockedPositions(), GameManager.instance.GetBlockedPositions1());
         }
     }
 
