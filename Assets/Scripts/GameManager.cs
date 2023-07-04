@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public bool ignoreTurns = false;
     public bool isGameover = false;
 
-    public Text uiText;
+    public UiSyncBehaviour uiSyncBehaviour;
 
     //a sort of singleton
     private void Awake()
@@ -167,10 +167,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void UpdateText(string text) {
-        uiText.text = text;
-        //if (NetworkManager.Singleton.IsServer) {
-        //    UpdateTextClientRpc(text);
-        //}
+    void UpdateText(string text) {
+        uiSyncBehaviour.ChangeText(text);
     }
 }
