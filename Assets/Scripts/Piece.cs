@@ -18,13 +18,15 @@ public class Piece : MonoBehaviour
 
     private bool isClicked = false;
     //private bool justClicked = false;
-    private Vector3 offset;
+    //private Vector3 offset;
 
     public Cell startingCell;
     public Cell targetCell;
     public bool isAlreadyMoved;
     public static HashSet<Piece> allPieces = new HashSet<Piece>();
     public bool isDeath = false;
+
+    public int pieceId; // this is for hacky networking searching a better solution.
 
     //Todo: Move the movement outside this script
 
@@ -48,7 +50,7 @@ public class Piece : MonoBehaviour
 
     public void Clicked() {
         isClicked = true;
-        offset = transform.position - GetMouseWorldPosition(); // for the movement
+        //offset = transform.position - GetMouseWorldPosition(); // for the movement
 
         startingCell = CastRayToFindMyCurrentCell();
         if (startingCell != null)
@@ -83,11 +85,6 @@ public class Piece : MonoBehaviour
 
     private void Update()
     {
-        if (isClicked) //for the movement
-        {
-            Vector3 targetPosition = GetMouseWorldPosition() + offset;
-            transform.position = new Vector3(targetPosition.x, transform.position.y, targetPosition.z);
-        }
         UpdateCell(CastRayToFindMyCurrentCell());
     }
 
