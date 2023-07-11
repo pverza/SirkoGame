@@ -44,7 +44,7 @@ public class Piece : MonoBehaviour
     private void Start()
     {
         Cell cell = CastRayToFindMyCurrentCell();
-        moveToThatCell(cell);
+        MoveToThatCell(cell);
         if (blocks) { cell.ToggleBlocked(true, this.pieceTeam); }
     }
 
@@ -66,7 +66,7 @@ public class Piece : MonoBehaviour
         if (targetCell != null && targetCell.higlited)
         {
             Piece otherCellPiece = targetCell.getPiece();
-            moveToThatCell(targetCell);
+            MoveToThatCell(targetCell);
             if (otherCellPiece != null && otherCellPiece != this)
             {
                 otherCellPiece.transform.position = Vector3.one * 100;
@@ -79,7 +79,7 @@ public class Piece : MonoBehaviour
         }
         else
         {
-            moveToThatCell(startingCell);
+            MoveToThatCell(startingCell);
         }
     }
 
@@ -88,28 +88,14 @@ public class Piece : MonoBehaviour
         UpdateCell(CastRayToFindMyCurrentCell());
     }
 
-    private Vector3 GetMouseWorldPosition()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        float rayDistance;
-
-        if (groundPlane.Raycast(ray, out rayDistance))
-        {
-            return ray.GetPoint(rayDistance);
-        }
-
-        return Vector3.zero;
-    }
-
     private void UpdateCell(Cell cell)
     {
         if (!isClicked) {
             return;
         }
-        if (cell == null) {
-            return;
-        }
+        //if (cell == null) { // if we add this chsk we have a bug. (clicking outside the gridmoves one piece if the last cell was reachable)
+        //    return;
+        //}
         targetCell = cell;
     }
 
@@ -130,7 +116,7 @@ public class Piece : MonoBehaviour
         return null;
     }
 
-    void moveToThatCell(Cell cell) {
+    void MoveToThatCell(Cell cell) {
         if (startingCell != null) { 
             startingCell.HigligtAdjacencCellsWithoutCell(false, CalculateDistence(), this);
             startingCell.removePiece();

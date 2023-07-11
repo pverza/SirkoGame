@@ -60,7 +60,21 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver(bool isStall) {
-        UpdateText(currentTeamThatIsPlayng.ToString() + " Player \nWins");
+        if (isStall) //Check for stall
+        {
+            if (numberOfTurnsAvailableForCurrentPlayer == 1) //Since this happens before the turn change this means that is the next player tyrn
+            {
+                UpdateText("Stall");
+            }
+            else
+            {
+                UpdateText(currentTeamThatIsPlayng == PieceTeam.WHITE ? PieceTeam.BLACK.ToString() : PieceTeam.WHITE.ToString() + " Player \nWins");
+            }
+        }
+        else // normal gameover conditions
+        {
+            UpdateText(currentTeamThatIsPlayng.ToString() + " Player \nWins");
+        }
         isGameover = true;
     }
 
